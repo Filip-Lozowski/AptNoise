@@ -8,3 +8,7 @@ def transform_raw_data():
 
 def load_labeled_data():
     return None
+
+
+def save_labeled_data():
+    return None
