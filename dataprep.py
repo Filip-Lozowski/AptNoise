@@ -1,8 +1,14 @@
-def download_articles():
-    return None
+import requests
 
 
-def transform_json_into_df():
+def download_articles(api_url, key):
+    articles_url = api_url + key
+    response = requests.get(articles_url)
+
+    return response
+
+
+def transform_response_into_df():
     return None
 
 
