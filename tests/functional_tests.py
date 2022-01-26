@@ -1,13 +1,14 @@
 from selenium import webdriver
 
 browser = webdriver.Firefox()
-browser.get('http://localhost:5000')
-
-assert "Flask" in browser.title
 
 # open the app
+browser.get('http://localhost:5000')
 
-# download the articles / be able to look at them
+# check if this is a news app
+assert "AptNoise" in browser.title
+
+# click a button to download articles
 
 # The most interesting articles (those containing higher scores) are closer to the top
 
@@ -15,7 +16,7 @@ assert "Flask" in browser.title
 
 # Click at the first article title to read it on its original page
 
-# assign a score to the article
+# assign a score to the article by typing it into a box near the link
 
 # assign scores to half of the articles
 
