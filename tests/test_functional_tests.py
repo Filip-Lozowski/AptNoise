@@ -14,8 +14,10 @@ class TestUsersPerspective:
         # open the app
         self.browser.get('http://localhost:5000')
 
-        # check if this is a news app
+        # check if this is a news app that is called AptNoise
         assert "AptNoise" in self.browser.title
+        header_text = self.browser.find_element('h1').text
+        assert "AptNoise" in header_text
 
         # click a button to download articles
 
