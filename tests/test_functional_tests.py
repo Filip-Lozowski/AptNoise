@@ -25,7 +25,8 @@ class TestUsersPerspective:
         assert table
 
         # Click at the first article title to read it on its original page
-        # assert there is a hyperlink in any of the table rows
+        link = self.browser.find_element(By.TAG_NAME, 'a')
+        assert link
 
         # assign a score to the article by typing it into a box near the link
 
