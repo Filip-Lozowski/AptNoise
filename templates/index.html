@@ -5,7 +5,13 @@
 {% block body %}
 <h1>Apt Noise</h1>
 <table id="id_articles_table">
-
+    {% for link in links_list %}
+        <tr>
+            <td>
+                <a href={{link}}>{{link}}</a>
+            </td>
+        </tr>
+    {% endfor %}
 </table>
 
 {% endblock %}
