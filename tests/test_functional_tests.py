@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
 class TestUsersPerspective:
@@ -16,8 +17,8 @@ class TestUsersPerspective:
 
         # check if this is a news app that is called AptNoise
         assert "AptNoise" in self.browser.title
-        header_text = self.browser.find_element('h1').text
-        assert "AptNoise" in header_text
+        header_text = self.browser.find_element(By.TAG_NAME, 'h1').text
+        assert "Apt Noise" in header_text
 
         # click a button to download articles
 
