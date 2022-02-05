@@ -20,7 +20,7 @@ class TestUsersPerspective:
         header_text = self.browser.find_element(By.TAG_NAME, 'h1').text
         assert "Apt Noise" in header_text
 
-        # Notice some articles displayed in a table
+        # Notice some article titles displayed in a table
 
         # Click at the first article title to read it on its original page
 
