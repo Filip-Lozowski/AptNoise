@@ -21,7 +21,7 @@ class TestUsersPerspective:
         assert "Apt Noise" in header_text
 
         # Notice some article titles displayed in a table
-        table = self.browser.find_element(By.ID, 'id_article_table')
+        table = self.browser.find_element(By.ID, 'id_articles_table')
         assert table
 
         # Click at the first article title to read it on its original page
