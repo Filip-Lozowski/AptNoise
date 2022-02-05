@@ -15,29 +15,20 @@ class TestUsersPerspective:
         # open the app
         self.browser.get('http://localhost:5000')
 
-        # check if this is a news app that is called AptNoise
+        # check if this is a news app that is called Apt Noise
         assert "AptNoise" in self.browser.title
         header_text = self.browser.find_element(By.TAG_NAME, 'h1').text
         assert "Apt Noise" in header_text
 
-        # click a button to download articles
-
-        # The most interesting articles (those containing higher scores) are closer to the top
-
-        # The least interesting articles are at the bottom
+        # Notice some articles displayed in a table
 
         # Click at the first article title to read it on its original page
 
         # assign a score to the article by typing it into a box near the link
 
-        # assign scores to half of the articles
-
-        # Save all scores
-
-        # Retrain the model
+        # Save the scores by clicking on a button
 
         # Reload the app
 
         # Previously rated articles disappeared
 
-        # Not sure -> The order of remaining articles changed (as there is some randomness involved)
