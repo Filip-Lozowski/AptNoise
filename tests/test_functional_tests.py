@@ -34,7 +34,7 @@ class TestUsersPerspective:
         input_box.send_keys('57')
 
         # Save the scores by clicking on a button
-        save_scores = self.browser.find_element(By.ID, 'id_save_scores')
+        save_scores = self.browser.find_element(By.ID, 'id_save_score')
         assert save_scores
         save_scores.click()
 
@@ -42,5 +42,5 @@ class TestUsersPerspective:
         time.sleep(3)
 
         # Previously rated article disappeared
-        reload_link = self.browser.find_element((By.TAG_NAME, 'a'))
+        reload_link = self.browser.find_element(By.TAG_NAME, 'a')
         assert link != reload_link
