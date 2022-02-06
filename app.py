@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from dataprep import download_articles
 from config import api_key
@@ -17,6 +17,10 @@ def create_app():
 
     @app.route('/', methods=['GET', 'POST'])
     def index():
-        return render_template('index.html', links_list=links_list)
-
+        if request.method == 'GET':
+            return render_template('index.html', link=links_list[0])
+        if request.method == 'POST':
+            score = request.form['item_score']
+            del links_list[0]
+            return redirect(url_for("index"))
     return app

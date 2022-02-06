@@ -5,7 +5,6 @@
 {% block body %}
 <h1>Apt Noise</h1>
 <table id="id_articles_table">
-    {% for link in links_list %}
         <tr>
             <td>
                 <a href={{link}}>{{link}}</a>
@@ -13,10 +12,10 @@
             <td>
                 <form method="post">
                     <input name="item_score" id="id_score" placeholder="Enter score"/>
+                    <input type="submit" value="Save score" name="saved_score" id="id_save_score"/>
                 </form>
             </td>
         </tr>
-    {% endfor %}
 </table>
 
 {% endblock %}
