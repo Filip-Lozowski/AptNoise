@@ -1,6 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-
+import time
 
 class TestUsersPerspective:
     @classmethod
@@ -29,10 +29,18 @@ class TestUsersPerspective:
         assert link
 
         # assign a score to the article by typing it into a box near the link
+        input_box = self.browser.find_element(By.ID, 'id_score')
+        assert input_box
+        input_box.send_keys('57')
 
         # Save the scores by clicking on a button
+        save_scores = self.browser.find_element(By.ID, 'id_save_scores')
+        assert save_scores
+        save_scores.click()
 
-        # Reload the app
+        # The app reloads
+        time.sleep(3)
 
-        # Previously rated articles disappeared
-
+        # Previously rated article disappeared
+        reload_link = self.browser.find_element((By.TAG_NAME, 'a'))
+        assert link != reload_link
