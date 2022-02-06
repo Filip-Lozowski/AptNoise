@@ -44,3 +44,8 @@ class TestHomePage:
             template, context = captured_templates[0]
 
             assert template.name == "index.html"
+
+    def test_can_save_a_post_request(self):
+        with app.test_client() as test_client:
+            response = test_client.post('/', data={'item_score': '16'})
+            assert '16' in response.data.decode()
