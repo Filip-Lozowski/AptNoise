@@ -15,7 +15,7 @@ def create_app():
     app = Flask(__name__)
     bootstrap = Bootstrap(app)
 
-    @app.route('/')
+    @app.route('/', methods=['GET', 'POST'])
     def index():
         return render_template('index.html', links_list=links_list)
 
