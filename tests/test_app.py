@@ -4,7 +4,7 @@ import os
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from flask import url_for, request, template_rendered
-from app import create_app
+from app import create_app, Record
 import pytest
 
 app = create_app()
@@ -45,7 +45,7 @@ class TestHomePage:
 
             assert template.name == "index.html"
 
-    def test_can_save_a_post_request(self, captured_templates):
+    def test_can_save_a_post_request(self, captured_templates): 
         with app.test_client() as test_client:
             response = test_client.post('/', data={'item_score': '16'})
             assert '16' in response.data.decode()
@@ -54,3 +54,10 @@ class TestHomePage:
 
             template, context = captured_templates[0]
             assert template.name == "index.html"
+
+
+class TestRecordModel:
+    def test_saving_and_retrieving_records(self):
+        first_record = Record(source='The Guardian', score=50)
+        assert first_record.source == 'The Guardian'
+        assert first_record.score == 50
