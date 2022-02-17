@@ -53,20 +53,33 @@ class TestHomePage:
             assert template.name == "index.html"
 
 # Ten test jest chyba niepotrzebny
-    def test_can_save_a_post_request(self, app, captured_templates):
-        with app.test_client() as test_client:
-            response = test_client.post('/', data={'item_score': '16'})
-            assert '16' in response.data.decode()
+#     def test_can_save_a_post_request(self, app, captured_templates):
+#         with app.test_client() as test_client:
+#             response = test_client.post('/', data={'item_score': '16'})
+#             assert '16' in response.data.decode()
+#
+#             assert len(captured_templates) == 1
+#
+#             template, context = captured_templates[0]
+#             assert template.name == "index.html"
 
-            assert len(captured_templates) == 1
 
-            template, context = captured_templates[0]
-            assert template.name == "index.html"
-
-# Trzeba dopisać pobranie z bazy danych tego właśnie zapisanego rekordu
 class TestRecordModel:
-    def test_saving_and_retrieving_records(self):
-        first_record = Record(source='The Guardian', score=50)
-        assert first_record.source == 'The Guardian'
-        assert first_record.score == 50
+    def test_new_record(self):
+        record = Record(source='The Guardian', score=50)
+        assert record.source == 'The Guardian'
+        assert record.score == 50
+
+    def test_saving_records(self, app):
+        record = Record(source='The Guardian', score=50)
+        with app.test_request_context():
+            db.session.add(record)
+            db.session.commit()
+
+            saved_record = Record.query.first()
+        assert saved_record == record
+
+
+
+
 
