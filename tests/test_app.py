@@ -9,15 +9,16 @@ import pytest
 
 
 @pytest.fixture()
-def client():
+def app():
     app = create_app()
     with app.app_context():
         db.create_all()
         yield app
         db.drop_all()
 
+
 @pytest.fixture
-def captured_templates():
+def captured_templates(app):
     recorded = []
 
     def record(sender, template, context, **kwargs):
@@ -33,12 +34,12 @@ def captured_templates():
 
 class TestHomePage:
 
-    def test_root_url_resolves_to_home_page_view(self):
+    def test_root_url_resolves_to_home_page_view(self, app):
         with app.test_request_context():
             self.url = url_for('index')
         assert self.url == '/'
 
-    def test_home_page_returns_correct_html(self, captured_templates):
+    def test_home_page_returns_correct_html(self, app, captured_templates):
         with app.test_client() as test_client:
             response = test_client.get('/')
             assert response.data.startswith(b'<!DOCTYPE html>')
@@ -51,7 +52,8 @@ class TestHomePage:
 
             assert template.name == "index.html"
 
-    def test_can_save_a_post_request(self, captured_templates):
+# Ten test jest chyba niepotrzebny
+    def test_can_save_a_post_request(self, app, captured_templates):
         with app.test_client() as test_client:
             response = test_client.post('/', data={'item_score': '16'})
             assert '16' in response.data.decode()
