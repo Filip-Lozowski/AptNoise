@@ -63,9 +63,10 @@ class TestHomePage:
             template, context = captured_templates[0]
             assert template.name == "index.html"
 
-
+# Trzeba dopisać pobranie z bazy danych tego właśnie zapisanego rekordu
 class TestRecordModel:
     def test_saving_and_retrieving_records(self):
         first_record = Record(source='The Guardian', score=50)
         assert first_record.source == 'The Guardian'
         assert first_record.score == 50
+
