@@ -7,7 +7,6 @@ import pandas as pd
 
 api_url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 response = download_articles(api_url, api_key)
-# articles_list = response.json()['articles']
 articles_df = pd.json_normalize(response.json()['articles'])
 
 db = SQLAlchemy()
