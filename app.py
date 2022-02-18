@@ -4,10 +4,23 @@ from flask_sqlalchemy import SQLAlchemy
 from dataprep import download_articles
 from config import api_key
 import pandas as pd
+import pickle
 
 api_url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 response = download_articles(api_url, api_key)
 articles_df = pd.json_normalize(response.json()['articles'])
+
+data_into_model = articles_df['source.name'].values.reshape(-1, 1)
+encoder = pickle.load(open('source_encoder.pkl', 'rb'))
+data_into_model = encoder.transform(data_into_model)
+
+ml_model = pickle.load(open('ml_model.pkl', 'rb'))
+predicted_scores = ml_model.predict(data_into_model)
+predicted_scores = pd.Series(predicted_scores, name='predicted_score')
+
+articles_df = pd.concat([articles_df, predicted_scores], axis=1)
+articles_df.sort_values('predicted_score', inplace=True)
+
 
 db = SQLAlchemy()
 
