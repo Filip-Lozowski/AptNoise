@@ -56,7 +56,10 @@ def create_app():
             return render_template('index.html', link=articles_df.loc[articles_df.index[0], 'url'])
         if request.method == 'POST':
             score = request.form['item_score']
-            rated_article = Record(source=articles_df.loc[articles_df.index[0], 'source.name'], score=score)
+            rated_article = Record(
+                source_name=articles_df.loc[articles_df.index[0], 'source.name'],
+                predicted_score_when_presented=score
+            )
             db.session.add(rated_article)
             db.session.commit()
             articles_df.drop(index=articles_df.index[0], inplace=True)
