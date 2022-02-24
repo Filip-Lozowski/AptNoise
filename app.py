@@ -27,8 +27,14 @@ db = SQLAlchemy()
 
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    source = db.Column(db.String(40))
-    score = db.Column(db.Integer)
+    author = db.Column(db.String(40))
+    title = db.Column(db.String(100))
+    url = db.Column(db.String(100))
+    published_at = db.Column(db.String(30))
+    content = db.Column(db.String(220))
+    source_name = db.Column(db.String(40))
+    predicted_score_when_presented = db.Column(db.Integer)
+    assigned_score = db.Column(db.Integer)
 
     def __repr__(self):
         return f'Record(id={self.id}, source={self.source}, score={self.score})'

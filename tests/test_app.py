@@ -5,9 +5,12 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from flask import url_for, request, template_rendered
 from app import create_app, db, Record
-from dataprep import prepare_articles
+from dataprep import download_articles, prepare_articles
+from config import api_key
 import pytest
 import pickle
+
+api_url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 
 
 @pytest.fixture()
@@ -74,9 +77,9 @@ class TestHomePage:
 
 class TestRecordModel:
     def test_new_record(self):
-        record = Record(source='The Guardian', score=50)
-        assert record.source == 'The Guardian'
-        assert record.score == 50
+        record = Record(source_name='The Guardian', predicted_score_when_presented=50)
+        assert record.source_name == 'The Guardian'
+        assert record.predicted_score_when_presented == 50
 
     def test_saving_records(self, app):
         article_content = '''
@@ -108,14 +111,14 @@ class TestRecordModel:
 
 class TestMLModel:
     def test_input_data(self):
-        raw_articles = download_articles()
+        raw_articles = download_articles(api_url, api_key)
         input_data = prepare_articles(raw_articles)
         assert len(input_data) > 0
-        assert input_data.columns == ['author', 'title', 'url', 'content', 'source_name']
+        assert input_data.columns.to_list() == ['author', 'title', 'url', 'content', 'source_name']
 
     def test_ml_model(self):
         ml_model = pickle.load(open('ml_model.pkl', 'rb'))
-        raw_articles = download_articles()
+        raw_articles = download_articles(api_url, api_key)
         input_data = prepare_articles(raw_articles)
 
         predictions = ml_model.predict(input_data)
