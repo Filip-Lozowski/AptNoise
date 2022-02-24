@@ -5,7 +5,9 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from flask import url_for, request, template_rendered
 from app import create_app, db, Record
+from dataprep import prepare_articles
 import pytest
+import pickle
 
 
 @pytest.fixture()
@@ -106,13 +108,15 @@ class TestRecordModel:
 
 class TestMLModel:
     def test_input_data(self):
-        input_data = prepare_articles()
+        raw_articles = download_articles()
+        input_data = prepare_articles(raw_articles)
         assert len(input_data) > 0
         assert input_data.columns == ['author', 'title', 'url', 'content', 'source_name']
 
     def test_ml_model(self):
         ml_model = pickle.load(open('ml_model.pkl', 'rb'))
-        input_data = prepare_articles()
+        raw_articles = download_articles()
+        input_data = prepare_articles(raw_articles)
 
         predictions = ml_model.predict(input_data)
         assert predictions
