@@ -82,16 +82,17 @@ class TestRecordModel:
             by the Smiths family turned out to be a magnificent singer showing off his skills in one of Mozart's
             classics. His performance of Cherubino's aria from the 18th century opera The Marriage of Figaro has won 
             the hearts of hundreds of thousands music-lovers. 
-            According to the Smiths, Mr Fluffy Ears had a passion for music since he was a puppy...
+            According to the Smiths, Mr Fluffy Ears had a passion for music since he was a puppy...[+5433 chars]
             '''
 
         record = Record(
-            source='Doggo News',
-            predicted_score_when_presented=50,
             author='John Doe',
             title="Dog Sings The Entire Cherubino's Aria",
-            content=article_content,
             url='http://www.best-doggo-news.com',
+            published_at='2022-02-20T15:42:54',
+            content=article_content,
+            source_name='Doggo News',
+            predicted_score_when_presented=50,
             assigned_score=98
         )
 
@@ -107,8 +108,7 @@ class TestMLModel:
     def test_input_data(self):
         input_data = prepare_articles()
         assert len(input_data) > 0
-        # change the order below
-        assert input_data.columns == ['source_name', 'author', 'title', 'url', 'content']
+        assert input_data.columns == ['author', 'title', 'url', 'content', 'source_name']
 
     def test_ml_model(self):
         ml_model = pickle.load(open('ml_model.pkl', 'rb'))
