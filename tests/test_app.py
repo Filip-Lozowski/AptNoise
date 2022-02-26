@@ -120,7 +120,10 @@ class TestMLModel:
         ml_model = pickle.load(open('ml_model.pkl', 'rb'))
         raw_articles = download_articles(api_url, api_key)
         input_data = prepare_articles(raw_articles)
+        input_data = input_data[['author', 'source_name']]
+        encoder = pickle.load(open('source_encoder.pkl', 'rb'))
+        input_data = encoder.transform(input_data)
 
         predictions = ml_model.predict(input_data)
-        assert predictions
+        assert predictions.any()
 
