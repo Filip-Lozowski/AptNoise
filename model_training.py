@@ -1,6 +1,4 @@
 import pickle
-import sqlite3
-import pandas as pd
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.tree import DecisionTreeRegressor
 from dataprep import db_to_df
