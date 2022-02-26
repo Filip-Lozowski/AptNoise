@@ -3,28 +3,11 @@ import sqlite3
 import pandas as pd
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.tree import DecisionTreeRegressor
+from dataprep import db_to_df
 
 
 def model_training(test):
-    con = sqlite3.connect('site.db')
-    cur = con.cursor()
-
-    cur.execute("SELECT * FROM record")
-    articles = cur.fetchall()
-
-    input_cols = [
-        'id',
-        'author',
-        'title',
-        'url',
-        'published_at',
-        'content',
-        'source_name',
-        'predicted_score_when_presented',
-        'assigned_score'
-    ]
-    articles_df = pd.DataFrame(articles, columns=input_cols)
-    articles_df.set_index('id', inplace=True)
+    articles_df = db_to_df()
 
     encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=999)
     cat_cols = ['author', 'source_name']
