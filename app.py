@@ -10,16 +10,16 @@ api_url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 response = download_articles(api_url, api_key)
 articles_df = pd.json_normalize(response.json()['articles'])
 
-data_into_model = articles_df['source.name'].values.reshape(-1, 1)
-encoder = pickle.load(open('source_encoder.pkl', 'rb'))
-data_into_model = encoder.transform(data_into_model)
-
-ml_model = pickle.load(open('ml_model.pkl', 'rb'))
-predicted_scores = ml_model.predict(data_into_model)
-predicted_scores = pd.Series(predicted_scores, name='predicted_score')
-
-articles_df = pd.concat([articles_df, predicted_scores], axis=1)
-articles_df.sort_values('predicted_score', inplace=True)
+# data_into_model = articles_df['source.name'].values.reshape(-1, 1)
+# encoder = pickle.load(open('source_encoder.pkl', 'rb'))
+# data_into_model = encoder.transform(data_into_model)
+#
+# ml_model = pickle.load(open('ml_model.pkl', 'rb'))
+# predicted_scores = ml_model.predict(data_into_model)
+# predicted_scores = pd.Series(predicted_scores, name='predicted_score')
+#
+# articles_df = pd.concat([articles_df, predicted_scores], axis=1)
+# articles_df.sort_values('predicted_score', inplace=True)
 
 
 db = SQLAlchemy()
@@ -57,8 +57,15 @@ def create_app():
         if request.method == 'POST':
             score = request.form['item_score']
             rated_article = Record(
+                predicted_score_when_presented=score,
+                author=articles_df.loc[articles_df.index[0], 'author'],
+                title=articles_df.loc[articles_df.index[0], 'title'],
+                url=articles_df.loc[articles_df.index[0], 'url'],
+                published_at=articles_df.loc[articles_df.index[0], 'publishedAt'],
+                content=articles_df.loc[articles_df.index[0], 'content'],
                 source_name=articles_df.loc[articles_df.index[0], 'source.name'],
-                predicted_score_when_presented=score
+                # predicted_score_when_presented=,
+                assigned_score=score
             )
             db.session.add(rated_article)
             db.session.commit()

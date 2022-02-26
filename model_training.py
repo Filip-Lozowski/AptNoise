@@ -10,16 +10,30 @@ cur = con.cursor()
 cur.execute("SELECT * FROM record")
 articles = cur.fetchall()
 
-articles_df = pd.DataFrame(articles, columns=['id', 'source_name', 'score'])
+input_cols = [
+    'id',
+    'author',
+    'title',
+    'url',
+    'published_at',
+    'content',
+    'source_name',
+    'predicted_score_when_presented',
+    'assigned_score'
+]
+articles_df = pd.DataFrame(articles, columns=input_cols)
 articles_df.set_index('id', inplace=True)
 
 encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=999)
-encoder.fit(articles_df['source_name'].values.reshape(-1, 1))
+cat_cols = ['author', 'source_name']
+encoder.fit(articles_df[cat_cols])
 
 training_data = articles_df.copy()
-training_data['source_name'] = encoder.transform(training_data['source_name'].values.reshape(-1, 1))
-x_train = training_data.drop(columns=['score'])
-y_train = training_data['score']
+training_data.dropna(how='any', inplace=True)
+
+training_data[cat_cols] = encoder.transform(training_data[cat_cols])
+x_train = training_data[['author', 'source_name']]
+y_train = training_data['assigned_score']
 
 model = DecisionTreeRegressor()
 model.fit(x_train, y_train)
