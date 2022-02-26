@@ -78,3 +78,7 @@ def create_app():
         return dict(db=db, Record=Record)
 
     return app
+
+
+if __name__ == '__main__':
+    create_app()
