@@ -32,7 +32,7 @@ class TestUsersPerspective:
         # assign a score to the article by typing it into a box near the link
         input_box = self.browser.find_element(By.ID, 'id_score')
         assert input_box
-        input_box.send_keys('57')
+        input_box.send_keys('-999')
 
         # Save the scores by clicking on a button
         save_scores = self.browser.find_element(By.ID, 'id_save_score')
