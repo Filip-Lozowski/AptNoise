@@ -63,17 +63,6 @@ class TestHomePage:
 
             assert template.name == "index.html"
 
-# Ten test jest chyba niepotrzebny
-#     def test_can_save_a_post_request(self, app, captured_templates):
-#         with app.test_client() as test_client:
-#             response = test_client.post('/', data={'item_score': '16'})
-#             assert '16' in response.data.decode()
-#
-#             assert len(captured_templates) == 1
-#
-#             template, context = captured_templates[0]
-#             assert template.name == "index.html"
-
 
 class TestRecordModel:
     def test_new_record(self):
