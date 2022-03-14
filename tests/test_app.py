@@ -87,7 +87,8 @@ class TestRecordModel:
             content=article_content,
             source_name='Doggo News',
             predicted_score_when_presented=50,
-            assigned_score=98
+            assigned_score=98,
+            is_test_record=0
         )
 
         with app.test_request_context():

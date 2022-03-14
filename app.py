@@ -5,6 +5,7 @@ from dataprep import download_articles, prepare_articles
 from config import api_key
 import pandas as pd
 import pickle
+from random import randint
 
 api_url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 
@@ -37,6 +38,7 @@ class Record(db.Model):
     source_name = db.Column(db.String(40))
     predicted_score_when_presented = db.Column(db.Integer)
     assigned_score = db.Column(db.Integer)
+    is_test_record = db.Column(db.Integer)
 
     def __repr__(self):
         return f'Record(id={self.id}, source={self.source}, score={self.score})'
@@ -66,7 +68,8 @@ def create_app():
                 content=articles_df.loc[articles_df.index[0], 'content'],
                 source_name=articles_df.loc[articles_df.index[0], 'source.name'],
                 predicted_score_when_presented=articles_df.loc[articles_df.index[0], 'predicted_score'],
-                assigned_score=score
+                assigned_score=score,
+                is_test_record=randint(0, 1)
             )
             db.session.add(rated_article)
             db.session.commit()
