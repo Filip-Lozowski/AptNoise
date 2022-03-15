@@ -37,7 +37,8 @@ def db_to_df():
         'content',
         'source_name',
         'predicted_score_when_presented',
-        'assigned_score'
+        'assigned_score',
+        'is_test_record'
     ]
     articles_df = pd.DataFrame(articles, columns=input_cols)
     articles_df.set_index('id', inplace=True)
