@@ -5,18 +5,17 @@ from dataprep import db_to_df
 
 
 def model_training(test):
-    articles_df = db_to_df()
+    articles = db_to_df()
+    articles = articles[articles['assigned_score'] != -999]
+    articles = articles.drop_duplicates(subset=['title', 'published_at'])
 
+    training = articles[articles['is_test_record'] == 0]
+    y_train = training['assigned_score']
+
+    feature_cols = ['author', 'source_name']
+    x_train = training[feature_cols]
     encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=999)
-    cat_cols = ['author', 'source_name']
-    encoder.fit(articles_df[cat_cols])
-
-    training_data = articles_df.copy()
-    training_data.dropna(how='any', inplace=True)
-
-    training_data[cat_cols] = encoder.transform(training_data[cat_cols])
-    x_train = training_data[['author', 'source_name']]
-    y_train = training_data['assigned_score']
+    encoder.fit(x_train)
 
     model = DecisionTreeRegressor()
     model.fit(x_train, y_train)
