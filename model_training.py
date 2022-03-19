@@ -16,6 +16,7 @@ def model_training(test):
     x_train = training[feature_cols]
     encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=999)
     encoder.fit(x_train)
+    x_train = encoder.transform(x_train)
 
     model = DecisionTreeRegressor(max_depth=1, random_state=23)
     model.fit(x_train, y_train)
