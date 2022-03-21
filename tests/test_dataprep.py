@@ -66,5 +66,5 @@ def test_derive_content_length():
     content_length = df.apply(derive_content_length, axis=1)
 
     assert content_length[0] == 5433
-    assert content_length[1] is None
+    assert content_length[1] is np.nan
     assert content_length[2] is None
