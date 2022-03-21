@@ -1,6 +1,8 @@
 import sys
 import os
 
+import pandas as pd
+
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from config import api_key
@@ -39,3 +41,29 @@ def test_db_to_df():
     assert not df.empty
     assert not df.isnull().all().all()
     assert df.index.name == 'id'
+
+
+def test_derive_content_length():
+    content1 = '''
+    In the last week a curious video has been gaining popularity like a snowball. Mr Fluffy Ears owned 
+    by the Smiths family turned out to be a magnificent singer showing off his skills in one of Mozart's
+    classics. His performance of Cherubino's aria from the 18th century opera The Marriage of Figaro has won 
+    the hearts of hundreds of thousands music-lovers. 
+    According to the Smiths, Mr Fluffy Ears had a passion for music since he was a puppy...[+5433 chars]
+    '''
+    content2 = ''
+    content3 = np.nan
+
+    df = pd.DataFrame(
+        [
+            ['John Doe', content1],
+            ['Jane Doe', content2],
+            ['', content3]
+        ],
+        columns=['author', 'content']
+    )
+    content_length = df.apply(derive_content_length, axis=1)
+
+    assert content_length[0] == 5433
+    assert content_length[1] is None
+    assert content_length[2] is None
