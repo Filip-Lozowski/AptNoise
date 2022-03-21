@@ -1,12 +1,13 @@
 import sys
 import os
 
+import numpy as np
 import pandas as pd
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from config import api_key
-from dataprep import download_articles, db_to_df
+from dataprep import download_articles, db_to_df, derive_content_length
 
 
 def test_download_articles_response_ok():
@@ -52,7 +53,7 @@ def test_derive_content_length():
     According to the Smiths, Mr Fluffy Ears had a passion for music since he was a puppy...[+5433 chars]
     '''
     content2 = ''
-    content3 = np.nan
+    content3 = 'This is a sample content without a number at the end.'
 
     df = pd.DataFrame(
         [
