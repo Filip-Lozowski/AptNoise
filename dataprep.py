@@ -1,3 +1,6 @@
+import re
+
+import numpy as np
 import requests
 import pandas as pd
 import sqlite3
@@ -44,3 +47,19 @@ def db_to_df():
     articles_df.set_index('id', inplace=True)
 
     return articles_df
+
+
+def derive_content_length(row):
+    content = row['content']
+
+    if content:
+        content_end = content[-20:]
+        match = re.search('\d+', content_end)
+    else:
+        return None
+
+    if match:
+        content_length = match[0]
+        return int(content_length)
+    else:
+        return np.nan
