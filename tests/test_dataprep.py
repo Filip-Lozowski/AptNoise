@@ -4,7 +4,7 @@ import os
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from config import api_key
-from dataprep import download_articles, db_to_df
+from dataprep import download_articles, prepare_articles, db_to_df
 
 
 def test_download_articles_response_ok():
@@ -19,6 +19,15 @@ def test_download_articles_is_json():
     response = download_articles(api_url, api_key)
 
     assert isinstance(response.json(), dict)
+
+
+def test_prepare_articles():
+    api_url = f'https://newsapi.org/v2/top-headlines?country=us&apiKey='
+    articles = download_articles(api_url, api_key)
+    df_result = prepare_articles(articles)
+    expected_cols = ['author', 'title', 'url', 'content', 'source_name']
+
+    assert df_result.columns.tolist() == expected_cols
 
 
 def test_db_to_df():
