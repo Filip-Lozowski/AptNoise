@@ -117,6 +117,7 @@ class TestMLModel:
         input_data[cat_cols] = encoder.transform(input_data[cat_cols])
 
         input_data['content_length_chars'] = input_data.apply(derive_content_length, axis=1)
+        input_data.dropna(subset='content_length_chars', inplace=True)
         input_data.drop(columns='content', inplace=True)
 
         predictions = ml_model.predict(input_data)
