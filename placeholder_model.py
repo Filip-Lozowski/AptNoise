@@ -7,8 +7,8 @@ from sklearn.tree import DecisionTreeRegressor
 
 
 encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=999)
-cat_cols = ['author', 'source_name']
-bogus_df = pd.DataFrame([['John Doe', 'RandomNews.com']], columns=cat_cols)
+feature_cols = ['author', 'source_name', 'content_length_chars']
+bogus_df = pd.DataFrame([['John Doe', 'RandomNews.com', 1000]], columns=feature_cols)
 encoder.fit(bogus_df)
 pickle.dump(encoder, open(f'source_encoder.pkl', 'wb'))
 

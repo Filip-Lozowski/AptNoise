@@ -5,7 +5,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from flask import url_for, request, template_rendered
 from app import create_app, db, Record
-from dataprep import download_articles, prepare_articles
+from dataprep import download_articles, prepare_articles, derive_content_length
 from config import api_key
 import pytest
 import pickle
@@ -110,9 +110,15 @@ class TestMLModel:
         ml_model = pickle.load(open('ml_model.pkl', 'rb'))
         raw_articles = download_articles(api_url, api_key)
         input_data = prepare_articles(raw_articles)
-        input_data = input_data[['author', 'source_name']]
+        input_data = input_data[['author', 'source_name', 'content']]
+
+        cat_cols = ['author', 'source_name']
         encoder = pickle.load(open('source_encoder.pkl', 'rb'))
-        input_data = encoder.transform(input_data)
+        input_data[cat_cols] = encoder.transform(input_data[cat_cols])
+
+        input_data['content_length_chars'] = input_data.apply(derive_content_length, axis=1)
+        input_data.dropna(subset='content_length_chars', inplace=True)
+        input_data.drop(columns='content', inplace=True)
 
         predictions = ml_model.predict(input_data)
         assert predictions.any()
