@@ -54,7 +54,7 @@ def derive_content_length(row):
 
     if content:
         content_end = content[-20:]
-        match = re.search('\d+', content_end)
+        match = re.search(r'\d+', content_end)
     else:
         return None
 
