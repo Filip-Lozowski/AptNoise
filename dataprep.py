@@ -25,8 +25,8 @@ def prepare_articles(articles):
     return df_for_ml
 
 
-def db_to_df():
-    con = sqlite3.connect('site.db')
+def db_to_df(path='site.db'):
+    con = sqlite3.connect(path)
     cur = con.cursor()
 
     cur.execute("SELECT * FROM record")
