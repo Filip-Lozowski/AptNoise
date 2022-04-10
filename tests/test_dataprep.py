@@ -7,7 +7,14 @@ import pandas as pd
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from config import api_key
-from dataprep import download_articles, prepare_articles, db_to_df, derive_content_length
+from dataprep import (
+    download_articles,
+    prepare_articles,
+    db_to_df,
+    derive_content_length,
+    db_into_ml,
+    new_data_into_ml_features
+)
 
 
 
