@@ -1,7 +1,7 @@
 import pickle
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.tree import DecisionTreeRegressor
-from dataprep import db_to_df, derive_content_length, db_into_ml
+from dataprep import db_into_ml
 
 
 def model_training(test):
