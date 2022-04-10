@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
-from dataprep import download_articles, prepare_articles, derive_content_length
+from dataprep import download_articles, new_data_into_ml_features
 from config import api_key
 import pandas as pd
 import pickle
@@ -11,18 +11,8 @@ api_url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 
 raw_articles = download_articles(api_url, api_key)
 articles_df = pd.json_normalize(raw_articles.json()['articles'])
-data_into_model = prepare_articles(raw_articles)
-data_into_model = data_into_model[['author', 'source_name', 'content']]
 
-data_into_model.dropna(subset='content', inplace=True)
-data_into_model['content_length_chars'] = data_into_model.apply(derive_content_length, axis=1)
-data_into_model.dropna(subset='content_length_chars', inplace=True)
-data_into_model.drop(columns='content', inplace=True)
-
-cat_cols = ['author', 'source_name']
-encoder = pickle.load(open('source_encoder.pkl', 'rb'))
-data_into_model[cat_cols] = encoder.transform(data_into_model[cat_cols])
-
+data_into_model = new_data_into_ml_features()
 ml_model = pickle.load(open('ml_model.pkl', 'rb'))
 predicted_scores = ml_model.predict(data_into_model)
 predicted_scores = pd.Series(predicted_scores, name='predicted_score')
