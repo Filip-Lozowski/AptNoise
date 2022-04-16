@@ -1,18 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
-from dataprep import download_articles, new_data_into_ml_features
-from config import api_key
+from dataprep import get_new_articles_df, prepare_articles, create_features, CAT_COLS
 import pandas as pd
 import pickle
 from random import randint
 
 api_url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 
-raw_articles = download_articles(api_url, api_key)
-articles_df = pd.json_normalize(raw_articles.json()['articles'])
 
-data_into_model = new_data_into_ml_features()
+articles_df = get_new_articles_df()
+data_into_model = prepare_articles(articles_df)
+data_into_model = create_features(data_into_model)
+
+encoder = pickle.load(open('source_encoder.pkl', 'rb'))
+data_into_model[CAT_COLS] = encoder.transform(data_into_model[CAT_COLS])
+
 ml_model = pickle.load(open('ml_model.pkl', 'rb'))
 predicted_scores = ml_model.predict(data_into_model)
 predicted_scores = pd.Series(predicted_scores, name='predicted_score')

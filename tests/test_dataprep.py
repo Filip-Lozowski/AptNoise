@@ -9,6 +9,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from config import api_key
 from dataprep import (
     download_articles,
+    get_new_articles_df,
     prepare_articles,
     db_to_df,
     derive_content_length,
@@ -32,9 +33,8 @@ def test_download_articles_is_json():
 
 
 def test_prepare_articles():
-    api_url = f'https://newsapi.org/v2/top-headlines?country=us&apiKey='
-    articles = download_articles(api_url, api_key)
-    df_result = prepare_articles(articles)
+    articles_df = get_new_articles_df()
+    df_result = prepare_articles(articles_df)
     expected_cols = ['author', 'title', 'url', 'content', 'source_name']
 
     assert df_result.columns.tolist() == expected_cols
