@@ -98,12 +98,6 @@ class TestRecordModel:
 
 
 class TestMLModel:
-    def test_input_data(self):
-        raw_articles = download_articles(API_URL, api_key)
-        input_data = prepare_articles(raw_articles)
-        assert len(input_data) > 0
-        assert input_data.columns.to_list() == ['author', 'title', 'url', 'content', 'source_name']
-
     def test_ml_model(self):
         data_into_model = new_data_into_ml_features()
         ml_model = pickle.load(open('ml_model.pkl', 'rb'))
