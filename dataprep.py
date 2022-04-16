@@ -27,16 +27,22 @@ def download_articles(api_url, key):
     return response
 
 
-def prepare_articles(articles):
-    df_for_ml = pd.json_normalize(articles.json()['articles'])
+def get_new_articles_df():
+    articles_raw = download_articles(api_url, api_key)
+    articles_df = pd.json_normalize(articles_raw.json()['articles'])
+
+    return articles_df
+
+
+def prepare_articles(articles_df):
     renaming_dict = {
         'publishedAt': 'published_at',
         'source.name': 'source_name'
     }
-    df_for_ml.rename(columns=renaming_dict, inplace=True)
-    df_for_ml = df_for_ml[['author', 'title', 'url', 'content', 'source_name']]
+    articles_df = articles_df.rename(columns=renaming_dict).copy()
+    articles_df = articles_df[['author', 'title', 'url', 'content', 'source_name']]
 
-    return df_for_ml
+    return articles_df
 
 
 def db_to_df(path='site.db'):
@@ -79,6 +85,15 @@ def derive_content_length(row):
         return np.nan
 
 
+def create_features(df):
+    new_df = df.dropna(subset='content').copy()
+    new_df['content_length_chars'] = new_df.apply(derive_content_length, axis=1)
+    new_df.dropna(subset='content_length_chars', inplace=True)
+    new_df = new_df[FEATURE_COLS]
+
+    return new_df
+
+
 def db_into_ml(set_type):
     articles = db_to_df()
 
@@ -91,26 +106,18 @@ def db_into_ml(set_type):
 
     articles = articles[articles['assigned_score'] != -999]
     articles = articles.drop_duplicates(subset=['title', 'published_at'])
-    articles.dropna(subset='content', inplace=True)
-    articles['content_length_chars'] = articles.apply(derive_content_length, axis=1)
-    articles.dropna(subset='content_length_chars', inplace=True)
 
-    cols = FEATURE_COLS + ['assigned_score']
-    articles = articles[cols].copy()
+    features = create_features(articles)
+    df_into_ml = features.merge(articles[['assigned_score']], how='left', left_index=True, right_index=True)
 
-    return articles
+    return df_into_ml
 
 
 def new_data_into_ml_features():
-    raw_articles = download_articles(api_url, api_key)
-    articles_df = prepare_articles(raw_articles)
+    articles_df = get_new_articles_df()
+    articles_df = prepare_articles(articles_df)
+    articles_df = create_features(articles_df)
 
-    articles_df.dropna(subset='content', inplace=True)
-    articles_df['content_length_chars'] = articles_df.apply(derive_content_length, axis=1)
-    articles_df.dropna(subset='content_length_chars', inplace=True)
-    articles_df.drop(columns='content', inplace=True)
-
-    articles_df = articles_df[FEATURE_COLS]
     encoder = pickle.load(open('source_encoder.pkl', 'rb'))
     articles_df[CAT_COLS] = encoder.transform(articles_df[CAT_COLS])
 
