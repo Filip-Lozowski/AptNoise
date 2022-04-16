@@ -5,10 +5,11 @@ import pandas as pd
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.tree import DecisionTreeRegressor
 
+from dataprep import FEATURE_COLS
+
 
 encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=999)
-feature_cols = ['author', 'source_name', 'content_length_chars']
-bogus_df = pd.DataFrame([['John Doe', 'RandomNews.com', 1000]], columns=feature_cols)
+bogus_df = pd.DataFrame([['John Doe', 'RandomNews.com', 1000]], columns=FEATURE_COLS)
 encoder.fit(bogus_df)
 pickle.dump(encoder, open(f'source_encoder.pkl', 'wb'))
 

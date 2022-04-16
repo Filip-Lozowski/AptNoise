@@ -1,19 +1,17 @@
 import pickle
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.tree import DecisionTreeRegressor
-from dataprep import db_into_ml
+from dataprep import db_into_ml, FEATURE_COLS, CAT_COLS
 
 
 def model_training(test):
     training = db_into_ml(set_type='training')
     y_train = training['assigned_score']
 
-    feature_cols = ['author', 'source_name', 'content_length_chars']
-    cat_cols = ['author', 'source_name']
-    x_train = training[feature_cols].copy()
+    x_train = training[FEATURE_COLS].copy()
     encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=999)
-    encoder.fit(x_train[cat_cols])
-    x_train[cat_cols] = encoder.transform(x_train[cat_cols])
+    encoder.fit(x_train[CAT_COLS])
+    x_train[CAT_COLS] = encoder.transform(x_train[CAT_COLS])
 
     model = DecisionTreeRegressor(max_depth=1, random_state=23)
     model.fit(x_train, y_train)

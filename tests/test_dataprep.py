@@ -8,6 +8,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from config import api_key
 from dataprep import (
+    FEATURE_COLS,
     download_articles,
     get_new_articles_df,
     prepare_articles,
@@ -88,7 +89,7 @@ def test_derive_content_length():
 
 def test_db_into_ml():
     result_df = db_into_ml(set_type='training')
-    expected_cols = ['author', 'source_name', 'content_length_chars', 'assigned_score']
+    expected_cols = FEATURE_COLS + ['assigned_score']
 
     assert not result_df.isnull().all().all()
     assert not result_df.empty
@@ -97,7 +98,7 @@ def test_db_into_ml():
 
 def test_new_data_into_ml_features():
     result_df = new_data_into_ml_features()
-    expected_cols = ['author', 'source_name', 'content_length_chars']
+    expected_cols = FEATURE_COLS
 
     assert not result_df.isnull().all().all()
     assert not result_df.empty
