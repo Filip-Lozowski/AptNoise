@@ -8,6 +8,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from config import api_key
 from dataprep import (
+    API_URL,
     FEATURE_COLS,
     download_articles,
     get_new_articles_df,
@@ -20,15 +21,13 @@ from dataprep import (
 
 
 def test_download_articles_response_ok():
-    api_url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
-    response = download_articles(api_url, api_key)
+    response = download_articles(API_URL, api_key)
 
     assert response.status_code == 200
 
 
 def test_download_articles_is_json():
-    api_url = f'https://newsapi.org/v2/top-headlines?country=us&apiKey='
-    response = download_articles(api_url, api_key)
+    response = download_articles(API_URL, api_key)
 
     assert isinstance(response.json(), dict)
 

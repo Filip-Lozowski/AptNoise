@@ -6,7 +6,9 @@ import requests
 import pandas as pd
 import sqlite3
 
-from config import api_url, api_key
+from config import api_key
+
+API_URL = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 
 FEATURE_COLS = [
     'author',
@@ -28,7 +30,7 @@ def download_articles(api_url, key):
 
 
 def get_new_articles_df():
-    articles_raw = download_articles(api_url, api_key)
+    articles_raw = download_articles(API_URL, api_key)
     articles_df = pd.json_normalize(articles_raw.json()['articles'])
 
     return articles_df

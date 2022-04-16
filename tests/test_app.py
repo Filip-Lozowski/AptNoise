@@ -5,12 +5,10 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from flask import url_for, request, template_rendered
 from app import create_app, db, Record
-from dataprep import download_articles, prepare_articles, new_data_into_ml_features
+from dataprep import API_URL, download_articles, prepare_articles, new_data_into_ml_features
 from config import api_key
 import pytest
 import pickle
-
-api_url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 
 
 @pytest.fixture()
@@ -101,7 +99,7 @@ class TestRecordModel:
 
 class TestMLModel:
     def test_input_data(self):
-        raw_articles = download_articles(api_url, api_key)
+        raw_articles = download_articles(API_URL, api_key)
         input_data = prepare_articles(raw_articles)
         assert len(input_data) > 0
         assert input_data.columns.to_list() == ['author', 'title', 'url', 'content', 'source_name']
