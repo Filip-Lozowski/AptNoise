@@ -6,22 +6,6 @@ import pandas as pd
 import pickle
 from random import randint
 
-
-articles_df = get_new_articles_df()
-data_into_model = prepare_new_articles(articles_df)
-data_into_model = create_features(data_into_model)
-
-encoder = pickle.load(open('cat_cols_encoder.pkl', 'rb'))
-data_into_model[CAT_COLS] = encoder.transform(data_into_model[CAT_COLS])
-
-ml_model = pickle.load(open('ml_model.pkl', 'rb'))
-predicted_scores = ml_model.predict(data_into_model)
-predicted_scores = pd.Series(predicted_scores, name='predicted_score')
-
-articles_df = pd.concat([articles_df, predicted_scores], axis=1)
-articles_df.sort_values('predicted_score', inplace=True)
-
-
 db = SQLAlchemy()
 
 
@@ -54,6 +38,20 @@ class Record(db.Model):
 
 
 def create_app():
+    articles_df = get_new_articles_df()
+    data_into_model = prepare_new_articles(articles_df)
+    data_into_model = create_features(data_into_model)
+
+    encoder = pickle.load(open('cat_cols_encoder.pkl', 'rb'))
+    data_into_model[CAT_COLS] = encoder.transform(data_into_model[CAT_COLS])
+
+    ml_model = pickle.load(open('ml_model.pkl', 'rb'))
+    predicted_scores = ml_model.predict(data_into_model)
+    predicted_scores = pd.Series(predicted_scores, name='predicted_score')
+
+    articles_df = pd.concat([articles_df, predicted_scores], axis=1)
+    articles_df.sort_values('predicted_score', inplace=True)
+
     app = Flask(__name__)
     bootstrap = Bootstrap(app)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
