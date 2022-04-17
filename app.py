@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
-from dataprep import get_new_articles_df, prepare_articles, create_features, CAT_COLS
+from dataprep import get_new_articles_df, prepare_new_articles, create_features, CAT_COLS
 import pandas as pd
 import pickle
 from random import randint
@@ -10,7 +10,7 @@ api_url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 
 
 articles_df = get_new_articles_df()
-data_into_model = prepare_articles(articles_df)
+data_into_model = prepare_new_articles(articles_df)
 data_into_model = create_features(data_into_model)
 
 encoder = pickle.load(open('source_encoder.pkl', 'rb'))

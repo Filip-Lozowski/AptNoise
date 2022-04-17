@@ -12,7 +12,7 @@ from dataprep import (
     FEATURE_COLS,
     download_articles,
     get_new_articles_df,
-    prepare_articles,
+    prepare_new_articles,
     db_to_df,
     derive_content_length,
     db_into_ml,
@@ -32,9 +32,9 @@ def test_download_articles_is_json():
     assert isinstance(response.json(), dict)
 
 
-def test_prepare_articles():
+def test_prepare_new_articles():
     articles_df = get_new_articles_df()
-    df_result = prepare_articles(articles_df)
+    df_result = prepare_new_articles(articles_df)
     expected_cols = ['author', 'title', 'url', 'content', 'source_name']
 
     assert df_result.columns.tolist() == expected_cols

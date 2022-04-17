@@ -36,7 +36,7 @@ def get_new_articles_df():
     return articles_df
 
 
-def prepare_articles(articles_df):
+def prepare_new_articles(articles_df):
     renaming_dict = {
         'source.name': 'source_name'
     }
@@ -116,7 +116,7 @@ def db_into_ml(set_type):
 
 def new_data_into_ml_features():
     articles_df = get_new_articles_df()
-    articles_df = prepare_articles(articles_df)
+    articles_df = prepare_new_articles(articles_df)
     articles_df = create_features(articles_df)
 
     encoder = pickle.load(open('source_encoder.pkl', 'rb'))
