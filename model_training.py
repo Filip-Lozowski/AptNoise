@@ -7,8 +7,8 @@ from dataprep import db_into_ml, FEATURE_COLS, CAT_COLS
 def model_training(test):
     training = db_into_ml(set_type='training')
     y_train = training['assigned_score']
-
     x_train = training[FEATURE_COLS].copy()
+
     encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=999)
     encoder.fit(x_train[CAT_COLS])
     x_train[CAT_COLS] = encoder.transform(x_train[CAT_COLS])
