@@ -6,7 +6,7 @@ import pandas as pd
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-from config import api_key
+from config import API_KEY
 from dataprep import (
     API_URL,
     FEATURE_COLS,
@@ -21,13 +21,13 @@ from dataprep import (
 
 
 def test_download_articles_response_ok():
-    response = download_articles(API_URL, api_key)
+    response = download_articles(API_URL, API_KEY)
 
     assert response.status_code == 200
 
 
 def test_download_articles_is_json():
-    response = download_articles(API_URL, api_key)
+    response = download_articles(API_URL, API_KEY)
 
     assert isinstance(response.json(), dict)
 
