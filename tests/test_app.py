@@ -3,10 +3,9 @@ import os
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-from flask import url_for, request, template_rendered
+from flask import url_for, template_rendered
 from app import create_app, db, Record
-from dataprep import API_URL, download_articles, prepare_articles, new_data_into_ml_features
-from config import api_key
+from dataprep import new_data_into_ml_features
 import pytest
 import pickle
 
