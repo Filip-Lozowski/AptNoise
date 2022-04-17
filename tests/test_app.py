@@ -98,7 +98,7 @@ class TestRecordModel:
 
 
 class TestMLModel:
-    def test_ml_model(self):
+    def test_production_ml_model(self):
         data_into_model = new_data_into_ml_features()
         ml_model = pickle.load(open('ml_model.pkl', 'rb'))
         predictions = ml_model.predict(data_into_model)
