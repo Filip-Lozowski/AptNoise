@@ -6,8 +6,6 @@ import pandas as pd
 import pickle
 from random import randint
 
-api_url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
-
 
 articles_df = get_new_articles_df()
 data_into_model = prepare_new_articles(articles_df)
