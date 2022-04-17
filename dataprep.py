@@ -119,7 +119,7 @@ def new_data_into_ml_features():
     articles_df = prepare_new_articles(articles_df)
     articles_df = create_features(articles_df)
 
-    encoder = pickle.load(open('source_encoder.pkl', 'rb'))
+    encoder = pickle.load(open('cat_cols_encoder.pkl', 'rb'))
     articles_df[CAT_COLS] = encoder.transform(articles_df[CAT_COLS])
 
     return articles_df

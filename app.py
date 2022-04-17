@@ -13,7 +13,7 @@ articles_df = get_new_articles_df()
 data_into_model = prepare_new_articles(articles_df)
 data_into_model = create_features(data_into_model)
 
-encoder = pickle.load(open('source_encoder.pkl', 'rb'))
+encoder = pickle.load(open('cat_cols_encoder.pkl', 'rb'))
 data_into_model[CAT_COLS] = encoder.transform(data_into_model[CAT_COLS])
 
 ml_model = pickle.load(open('ml_model.pkl', 'rb'))

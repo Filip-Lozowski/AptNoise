@@ -21,7 +21,7 @@ def model_training(test):
     else:
         suffix = ''
 
-    pickle.dump(encoder, open(f'source_encoder{suffix}.pkl', 'wb'))
+    pickle.dump(encoder, open(f'cat_cols_encoder{suffix}.pkl', 'wb'))
     pickle.dump(model, open(f'ml_model{suffix}.pkl', 'wb'))
 
     return None
