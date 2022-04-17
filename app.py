@@ -40,7 +40,19 @@ class Record(db.Model):
     is_test_record = db.Column(db.Integer)
 
     def __repr__(self):
-        return f'Record(id={self.id}, source={self.source}, score={self.score})'
+        return f'''
+        Record(
+        id={self.id}, 
+        author={self.author},
+        title={self.title},
+        url={self.url},
+        published_at={self.published_at},
+        content={self.content},
+        source_name={self.source_name},
+        predicted_score_when_presented={self.predicted_score_when_presented}, 
+        assigned_score={self.assigned_score},
+        is_test_record={self.is_test_record}
+        )'''
 
 
 def create_app():
