@@ -38,7 +38,6 @@ def get_new_articles_df():
 
 def prepare_articles(articles_df):
     renaming_dict = {
-        'publishedAt': 'published_at',
         'source.name': 'source_name'
     }
     articles_df = articles_df.rename(columns=renaming_dict).copy()
