@@ -1,6 +1,8 @@
 import sys
 import os
 
+import pytest
+
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 import pickle
@@ -9,8 +11,12 @@ from placeholder_model import generate_placeholder_model
 from dataprep import get_new_articles_df, prepare_new_articles, create_features, CAT_COLS, new_data_into_ml_features
 
 
-def test_placeholder_encoder_works_on_real_data():
+@pytest.fixture
+def generate_test_model():
     generate_placeholder_model(test=True)
+
+
+def test_placeholder_encoder_works_on_real_data():
     articles_df = get_new_articles_df()
     articles_df = prepare_new_articles(articles_df)
     articles_df = create_features(articles_df)
@@ -22,7 +28,6 @@ def test_placeholder_encoder_works_on_real_data():
 
 
 def test_model_generates_predictions():
-    generate_placeholder_model(test=True)
     data_into_model = new_data_into_ml_features()
     ml_model = pickle.load(open('ml_model_test.pkl', 'rb'))
     predicted_scores = ml_model.predict(data_into_model)
@@ -32,7 +37,6 @@ def test_model_generates_predictions():
 
 
 def test_placeholder_model_on_bogus_data():
-    generate_placeholder_model(test=True)
     data_into_model = {
         'int_col1': [1, 2, 3, 4],
         'str_col1': ['ab', 'cd', 'ef', 'gh']
