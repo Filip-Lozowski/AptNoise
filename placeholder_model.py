@@ -24,3 +24,7 @@ def generate_placeholder_model(test):
 
     pickle.dump(encoder, open(f'cat_cols_encoder{suffix}.pkl', 'wb'))
     pickle.dump(model, open(f'ml_model{suffix}.pkl', 'wb'))
+
+
+if __name__ == '__main__':
+    generate_placeholder_model(test=False)
