@@ -1,18 +1,18 @@
 import pickle
-
-import pandas as pd
-from sklearn.preprocessing import OrdinalEncoder
-from sklearn.tree import DecisionTreeRegressor
-
-from dataprep import FEATURE_COLS
+import numpy as np
 
 
-encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=999)
-bogus_df = pd.DataFrame([['John Doe', 'RandomNews.com', 1000]], columns=FEATURE_COLS)
-encoder.fit(bogus_df)
-pickle.dump(encoder, open(f'cat_cols_encoder.pkl', 'wb'))
+class PlaceholderModel:
+    def predict(self, input_data):
+        n_predictions = len(input_data)
+        return np.full(n_predictions, 50)
 
-bogus_df = encoder.transform(bogus_df)
-model = DecisionTreeRegressor()
-model.fit(bogus_df, pd.Series([50]))
-pickle.dump(model, open(f'ml_model.pkl', 'wb'))
+
+def generate_placeholder_model(test):
+    if test:
+        suffix = '_test'
+    else:
+        suffix = ''
+
+    model = PlaceholderModel()
+    pickle.dump(model, open(f'ml_model{suffix}.pkl', 'wb'))
