@@ -119,12 +119,17 @@ def db_into_ml(set_type):
     return df_into_ml
 
 
-def new_data_into_ml_features():
+def new_data_into_ml_features(test=False):
     articles_df = get_new_articles_df()
     articles_df = prepare_new_articles(articles_df)
     articles_df = create_features(articles_df)
 
-    encoder = pickle.load(open('cat_cols_encoder.pkl', 'rb'))
+    if test:
+        suffix = '_test'
+    else:
+        suffix = ''
+
+    encoder = pickle.load(open(f'cat_cols_encoder{suffix}.pkl', 'rb'))
     articles_df[CAT_COLS] = encoder.transform(articles_df[CAT_COLS])
 
     return articles_df
