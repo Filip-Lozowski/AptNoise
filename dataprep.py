@@ -8,9 +8,10 @@ import sqlite3
 
 from config import API_KEY
 import __main__
-from placeholder_model import PlaceholderEncoder
+from placeholder_model import PlaceholderEncoder, PlaceholderModel
 
 __main__.PlaceholderEncoder = PlaceholderEncoder
+__main__.PlaceholderModel = PlaceholderModel
 
 API_URL = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 
