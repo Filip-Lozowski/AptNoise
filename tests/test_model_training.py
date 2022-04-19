@@ -10,8 +10,7 @@ import pickle
 
 def test_model_training_finishes():
     model_training(test=True)
-
-    data_into_model = new_data_into_ml_features()
+    data_into_model = new_data_into_ml_features(test=True)
     ml_model = pickle.load(open('ml_model_test.pkl', 'rb'))
     predicted_scores = ml_model.predict(data_into_model)
 
