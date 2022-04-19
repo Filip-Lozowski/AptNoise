@@ -7,6 +7,10 @@ import pandas as pd
 import sqlite3
 
 from config import API_KEY
+import __main__
+from placeholder_model import PlaceholderEncoder
+
+__main__.PlaceholderEncoder = PlaceholderEncoder
 
 API_URL = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
 
