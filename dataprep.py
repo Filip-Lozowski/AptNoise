@@ -9,17 +9,12 @@ import sqlite3
 from config import API_KEY
 import __main__
 from placeholder_model import PlaceholderEncoder, PlaceholderModel
+from features import FEATURE_COLS
 
 __main__.PlaceholderEncoder = PlaceholderEncoder
 __main__.PlaceholderModel = PlaceholderModel
 
 API_URL = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
-
-FEATURE_COLS = [
-    'author',
-    'source_name',
-    'content_length_chars'
-]
 
 CAT_COLS = [
     'author',
