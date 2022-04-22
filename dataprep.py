@@ -95,7 +95,11 @@ def create_features(df, update_file=False, test=False):
     cols_to_drop = [
         'title',
         'url',
-        'content'
+        'content',
+        'published_at',
+        'predicted_score_when_presented',
+        'assigned_score',
+        'is_test_record'
     ]
 
     new_df.drop(columns=cols_to_drop, inplace=True)
@@ -113,7 +117,7 @@ def create_features(df, update_file=False, test=False):
     return new_df
 
 
-def db_into_ml(set_type):
+def db_into_ml(set_type, save_features=False):
     articles = db_to_df()
 
     if set_type == 'training':
@@ -126,7 +130,7 @@ def db_into_ml(set_type):
     articles = articles[articles['assigned_score'] != -999]
     articles = articles.drop_duplicates(subset=['title', 'published_at'])
 
-    features = create_features(articles)
+    features = create_features(articles, update_file=save_features)
     df_into_ml = features.merge(articles[['assigned_score']], how='left', left_index=True, right_index=True)
 
     return df_into_ml
