@@ -5,7 +5,7 @@ from dataprep import db_into_ml, FEATURE_COLS, CAT_COLS
 
 
 def model_training(test):
-    training = db_into_ml(set_type='training')
+    training = db_into_ml(set_type='training', save_features=True)
     y_train = training['assigned_score']
     x_train = training[FEATURE_COLS].copy()
 
