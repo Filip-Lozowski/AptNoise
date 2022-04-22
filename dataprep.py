@@ -9,12 +9,13 @@ import sqlite3
 from config import API_KEY
 import __main__
 from placeholder_model import PlaceholderEncoder, PlaceholderModel
-from features import FEATURE_COLS
 
 __main__.PlaceholderEncoder = PlaceholderEncoder
 __main__.PlaceholderModel = PlaceholderModel
 
 API_URL = 'https://newsapi.org/v2/top-headlines?country=us&apiKey='
+
+FEATURE_COLS = pickle.load(open('features.pkl', 'rb'))
 
 CAT_COLS = [
     'author',
@@ -86,11 +87,28 @@ def derive_content_length(row):
         return np.nan
 
 
-def create_features(df):
+def create_features(df, update_file=False, test=False):
     new_df = df.dropna(subset='content').copy()
     new_df['content_length_chars'] = new_df.apply(derive_content_length, axis=1)
     new_df.dropna(subset='content_length_chars', inplace=True)
-    new_df = new_df[FEATURE_COLS]
+
+    cols_to_drop = [
+        'title',
+        'url',
+        'content'
+    ]
+
+    new_df.drop(columns=cols_to_drop, inplace=True)
+
+    feature_cols = new_df.columns.tolist()
+
+    if update_file:
+        if test:
+            suffix = '_test'
+        else:
+            suffix = ''
+
+        pickle.dump(feature_cols, open(f'features{suffix}.pkl', 'wb'))
 
     return new_df
 

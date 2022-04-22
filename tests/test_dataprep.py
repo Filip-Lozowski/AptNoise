@@ -1,5 +1,6 @@
 import sys
 import os
+import pickle
 
 import numpy as np
 import pandas as pd
@@ -15,6 +16,7 @@ from dataprep import (
     prepare_new_articles,
     db_to_df,
     derive_content_length,
+    create_features,
     db_into_ml,
     new_data_into_ml_features
 )
@@ -84,6 +86,24 @@ def test_derive_content_length():
     assert content_length[0] == 5433
     assert np.isnan(content_length[1])
     assert np.isnan(content_length[2])
+
+
+def test_updating_feature_info():
+    if os.path.exists("features_test.py"):
+        os.remove("features_test.py")
+
+    articles_df = get_new_articles_df()
+    articles_df = prepare_new_articles(articles_df)
+
+    create_features(articles_df, update_file=True, test=True)
+
+    feature_cols = pickle.load(open('features_test.pkl', 'rb'))
+
+    assert len(feature_cols) > 1
+    assert "author" in feature_cols
+    assert "source_name" in feature_cols
+    assert "content" not in feature_cols
+    assert "id" not in feature_cols
 
 
 def test_db_into_ml():
