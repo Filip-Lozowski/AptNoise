@@ -92,17 +92,24 @@ def create_features(df, update_file=False, test=False):
     new_df['content_length_chars'] = new_df.apply(derive_content_length, axis=1)
     new_df.dropna(subset='content_length_chars', inplace=True)
 
-    cols_to_drop = [
+    non_feature_cols = [
         'title',
         'url',
         'content',
+    ]
+
+    optional_non_features = [
         'published_at',
         'predicted_score_when_presented',
         'assigned_score',
         'is_test_record'
     ]
 
-    new_df.drop(columns=cols_to_drop, inplace=True)
+    actual_cols = new_df.columns.tolist()
+
+    non_feature_cols = non_feature_cols + [col for col in optional_non_features if col in actual_cols]
+
+    new_df.drop(columns=non_feature_cols, inplace=True)
 
     feature_cols = new_df.columns.tolist()
 
